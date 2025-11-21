@@ -3,9 +3,16 @@ import string
 import os
 
 from secrets import choice
-from rich.progress import track
-
 from argparse import ArgumentParser, Namespace
+
+
+rich_installed: bool = False
+try:
+    from rich.progress import track
+    rich_installed = True
+except ImportError:
+    pass
+
 
 SAVE_DIR: str = 'saved_passwords'
 CHARACTER_POOL: str = string.ascii_letters + string.digits + string.punctuation
@@ -29,7 +36,7 @@ del ARGS
 
 # generate passwords
 passwords: list[str] = []
-for _ in track(range(count), description=f'Generating {count:,} {length:,}-character passwords...'):
+for _ in track(range(count), description=f'Generating {count:,} {length:,}-character passwords...') if rich_installed else range(count):
     pw: str = ''.join(choice(list(CHARACTER_POOL)) for _ in range(length))
     passwords.append(pw)
 
