@@ -1,6 +1,7 @@
-import datetime
+from datetime import datetime, date
 import string
 import os
+import json
 
 from secrets import choice
 from argparse import ArgumentParser, Namespace
@@ -13,6 +14,10 @@ try:
 except ImportError:
     pass
 
+with open(os.getcwd() + '/settings.json', 'r') as f:
+    SETTINGS = json.load(f)
+
+
 SAVE_DIR: str = 'saved_passwords'
 CHARACTER_POOL: str = string.ascii_letters + string.digits + string.punctuation
 
@@ -20,7 +25,7 @@ PARSER: ArgumentParser = ArgumentParser()
 
 # add arguments
 PARSER.add_argument('-c', '--count', required=False, default=10, type=int, help='The amount of passwords to generate')
-PARSER.add_argument('-l', '--length', required=False, default=16, type=int, help='The length of each password')
+PARSER.add_argument('-l', '--length', required=False, default=SETTINGS['standard_length'], type=int, help='The length of each password')
 PARSER.add_argument('-s', '--save', action='store_true', help='saves the password in a file')
 PARSER.add_argument('-no', '--no-output', action='store_true', help='prevents passwords from showing in the terminal')
 PARSER.add_argument('--bypass-warning', action='store_true', help='bypass the warning for insecure passwords')
@@ -34,9 +39,9 @@ NO_OUTPUT: bool = ARGS.no_output
 BYPASS_WARNING: bool = ARGS.bypass_warning
 del ARGS
 
-if LENGTH < 16 and not BYPASS_WARNING:
-    print('passwords shorter than 16 characters are insecure!')
-    print('length of at least 16 characters advised!')
+if LENGTH < SETTINGS['min_length'] and not BYPASS_WARNING:
+    print(f'passwords shorter than {SETTINGS['min_length']} characters are insecure!')
+    print(f'length of at least {SETTINGS['min_length']} characters advised!')
     user = input('Continue? [y/n]: ') == 'y'
     if not user:
         print('Exiting...')
@@ -48,7 +53,7 @@ for _ in track(range(COUNT), description=f'Generating {COUNT:,} {LENGTH:,}-chara
     pw: str = ''.join(choice(list(CHARACTER_POOL)) for _ in range(LENGTH))
     passwords.append(pw)
 
-# outputs them if needed
+# outputs passwords if needed
 if not NO_OUTPUT:
     width: int = len(str(len(passwords)))
     for i, pwd in enumerate(passwords, start=1):
@@ -56,8 +61,8 @@ if not NO_OUTPUT:
 
 
 # create filename
-current_date: datetime.date = datetime.date.today()
-current_time: str = datetime.datetime.now().strftime("%H-%M-%S")
+current_date: date = date.today()
+current_time: str = datetime.now().strftime("%H-%M-%S")
 file_name: str = f'saved_passwords_{current_date}_{current_time}.txt'
 
 # saves passwords if needed
