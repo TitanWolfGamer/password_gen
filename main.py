@@ -24,7 +24,7 @@ CHARACTER_POOL: str = string.ascii_letters + string.digits + string.punctuation
 PARSER: ArgumentParser = ArgumentParser()
 
 # add arguments
-PARSER.add_argument('-c', '--count', required=False, default=10, type=int, help='The amount of passwords to generate')
+PARSER.add_argument('-c', '--count', required=False, default=SETTINGS['standard_count'], type=int, help='The amount of passwords to generate')
 PARSER.add_argument('-l', '--length', required=False, default=SETTINGS['standard_length'], type=int, help='The length of each password')
 PARSER.add_argument('-s', '--save', action='store_true', help='saves the password in a file')
 PARSER.add_argument('-no', '--no-output', action='store_true', help='prevents passwords from showing in the terminal')
