@@ -13,8 +13,6 @@ def show_warning() -> None:
     print('Deleting all passwords in irreversible!')
 
 
-
-
 PARSER = argparse.ArgumentParser()
 PARSER.add_argument('-y', '--yes', action='store_true', help="suppress prompts")
 ARGS = PARSER.parse_args()
@@ -28,7 +26,6 @@ if not ARGS.yes:
         surety = True if input('Are you sure?') == 'y' else False
 else:
     surety = True
-
 
 
 FOLDER = os.getcwd() + '\\saved_passwords'
