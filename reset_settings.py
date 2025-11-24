@@ -15,8 +15,10 @@ PARSER.add_argument('--yes', action='store_true', help="Automatically answer yes
 ARGS = PARSER.parse_args()
 
 
-with open('./default_settings.json', 'r') as f:
-    default_settings = json.load(f)
+with open('./config.json', 'r') as f:
+    CONFIG = json.load(f)
+
+DEFAULT_SETTINGS = CONFIG['default_settings']
 
 prompt: str = 'Are you sure you want to delete all settings?'
 
@@ -36,6 +38,6 @@ if surety:
 
     # dump default settings in new file
     with open('settings.json', 'w') as file:
-        json.dump(default_settings, file)
+        json.dump(DEFAULT_SETTINGS, file)
     print('settings reset!')
 

@@ -1,1 +1,4 @@
 .idea/*
+./saved_passwords/
+./saved_passwords/*
+./settings.json
