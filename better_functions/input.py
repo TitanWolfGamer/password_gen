@@ -1,9 +1,9 @@
 from collections.abc import Callable
 from typing import Any
-vanilla_input: Callable = input
-vanilla_type: type = type
+__vanilla_input: Callable = input
+__vanilla_type: type = type
 
-def input(prompt: str, choices: list[str] = None, default: str = '', show_choices: bool = True, show_default: bool = True, type: vanilla_type = str, required: bool = False) -> Any:
+def input(prompt: str, choices: list[str] = None, default: str = '', show_choices: bool = True, show_default: bool = True, type: __vanilla_type = str, required: bool = False) -> Any:
     given_choices: bool = bool(choices)
 
     prompt += f' [{'/'.join(choices)}]' if given_choices and show_choices else ''
@@ -11,7 +11,7 @@ def input(prompt: str, choices: list[str] = None, default: str = '', show_choice
 
     prompt += ': ' if choices and show_choices or default and show_default else ''
     while True:
-        user: Any = vanilla_input(prompt)
+        user: Any = __vanilla_input(prompt)
 
         if given_choices:
             if user not in choices:
